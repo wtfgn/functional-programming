@@ -2,12 +2,12 @@
 
 Functional programming is based on the following two pillars:
 
-- Referential transparency
-- Composition (as universal design pattern)
+* Referential transparency
+* Composition (as universal design pattern)
 
 All of the remaining content derives directly or indirectly from those two points.
 
-## Referential transparency
+### Referential transparency
 
 > **Definition**. An **expression** is said to be _referentially transparent_ if it can be replaced with its corresponding value without changing the program's behavior
 
@@ -62,8 +62,8 @@ On the last line I cannot replace `xs` with its initial value `[1, 2, 3]` since 
 
 Why is referential transparency so important? Because it allows us to:
 
-- **reason about code locally**, there is no need to know external context in order to understand a fragment of code
-- **refactor** without changing our system's behaviour
+* **reason about code locally**, there is no need to know external context in order to understand a fragment of code
+* **refactor** without changing our system's behaviour
 
 **Quiz**. Suppose we have the following program:
 
@@ -84,18 +84,17 @@ const y = x
 
 The answer is: there's no way to know without reading `question`'s _implementation_.
 
-As you can see, refactoring a program including non-referentially transparent expressions might be challenging.
-In functional programming, where every expression is referentially transparent, the cognitive load required to make changes is severely reduced.
+As you can see, refactoring a program including non-referentially transparent expressions might be challenging. In functional programming, where every expression is referentially transparent, the cognitive load required to make changes is severely reduced.
 
-## Composition
+### Composition
 
 Functional programming's fundamental pattern is _composition_: we compose small units of code accomplishing very specific tasks into larger and complex units.
 
 An example of a "from the smallest to the largest" composition pattern we can think of:
 
-- composing two or more primitive values (numbers or strings)
-- composing two or more functions
-- composing entire programs
+* composing two or more primitive values (numbers or strings)
+* composing two or more functions
+* composing entire programs
 
 In the very last example we can speak of _modular programming_:
 
@@ -115,7 +114,7 @@ combinator: Thing -> Thing
 
 **Example**. The function `double` combines two numbers.
 
-The goal of a combinator is to create new *Thing*s from *Thing*s already defined.
+The goal of a combinator is to create new _Thing_s from _Thing_s already defined.
 
 Since the output of a combinator, the new _Thing_, can be passed around as input to other programs and combinators, we obtain a combinatorial explosion of opportunities, which makes this pattern extremely powerful.
 
@@ -131,15 +130,15 @@ console.log(pipe(2, double, double, double)) // => 16
 
 Thus the usual design you can find in a functional module is:
 
-- a model for some type `T`
-- a small set of "primitives" of type `T`
-- a set of combinators to combine the primitives in larger structures
+* a model for some type `T`
+* a small set of "primitives" of type `T`
+* a set of combinators to combine the primitives in larger structures
 
 Let's try to implement such a module:
 
 **Demo**
 
-[`01_retry.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/01_retry.ts)
+[`01_retry.ts`](src/01\_retry.ts)
 
 As you can see from the previous demo, with merely 3 primitives and two combinators we've been able to express a pretty complex policy.
 

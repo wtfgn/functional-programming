@@ -1,4 +1,4 @@
-# Modelling equivalence with `Eq`
+# Modelling equivalence with Eq
 
 Yet again, we can model the notion of equality.
 
@@ -12,8 +12,8 @@ interface Eq<A> {
 
 Intuitively:
 
-- if `equals(x, y) = true` then we say `x` and `y` are equal
-- if `equals(x, y) = false` then we say `x` and `y` are different
+* if `equals(x, y) = true` then we say `x` and `y` are equal
+* if `equals(x, y) = false` then we say `x` and `y` are different
 
 **Example**
 
@@ -108,7 +108,7 @@ console.log(pipe(points, elem(EqPoint)(search))) // => true :)
 
 **Quiz** (JavaScript). Why does the `includes` method returns `false`?
 
--> See the [answer here](quiz-answers/javascript-includes.md)
+\-> See the [answer here](quiz-answers/javascript-includes.md)
 
 Abstracting the concept of equality is of paramount importance, especially in a language like JavaScript where some data types do not offer handy APIs for checking user-defined equality.
 
@@ -254,7 +254,7 @@ console.log(EqID.equals({ id: 1, name: 'Giulio' }, { id: 2, name: 'Giulio' }))
 
 **Quiz**. Given a data type `A`, is it possible to define a `Semigroup<Eq<A>>`? What could it represent?
 
-## Modeling ordering relations with `Ord`
+### Modeling ordering relations with `Ord`
 
 In the previous chapter regarding `Eq` we were dealing with the concept of **equality**. In this one we'll deal with the concept of **ordering**.
 
@@ -272,9 +272,9 @@ interface Ord<A> extends Eq<A> {
 
 Resulting in:
 
-- `x < y` if and only if `compare(x, y) = -1`
-- `x = y` if and only if `compare(x, y) = 0`
-- `x > y` if and only if `compare(x, y) = 1`
+* `x < y` if and only if `compare(x, y) = -1`
+* `x = y` if and only if `compare(x, y) = 0`
+* `x > y` if and only if `compare(x, y) = 1`
 
 **Example**
 
@@ -346,7 +346,7 @@ const min = <A>(O: Ord<A>) => (second: A) => (first: A): A =>
 pipe(2, min(N.Ord)(1), console.log) // => 1
 ```
 
-## Dual Ordering
+### Dual Ordering
 
 In the same way we could invert the `concat` operation to obtain the `dual semigroup` using the `reverse` combinator, we can invert the `compare` operation to get the dual ordering.
 

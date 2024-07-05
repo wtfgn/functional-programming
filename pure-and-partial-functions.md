@@ -6,9 +6,9 @@ In the first chapter we've seen an informal definition of a pure function:
 
 Such an informal statement could leave space for some doubts, such as:
 
-- what is a "side effect"?
-- what does it means "observable"?
-- what does it mean "same"?
+* what is a "side effect"?
+* what does it means "observable"?
+* what does it mean "same"?
 
 Let's see a formal definition of the concept of a function.
 
@@ -18,10 +18,9 @@ Let's see a formal definition of the concept of a function.
 X × Y = { (x, y) | x ∈ X, y ∈ Y }
 ```
 
-The following [definition](https://en.wikipedia.org/wiki/History_of_the_function_concept) was given a century ago:
+The following [definition](https://en.wikipedia.org/wiki/History\_of\_the\_function\_concept) was given a century ago:
 
-**Definition**. A \_function: `f: X ⟶ Y` is a subset of `X × Y` such as
-for every `x ∈ X` there's exactly one `y ∈ Y` such that `(x, y) ∈ f`.
+**Definition**. A \_function: `f: X ⟶ Y` is a subset of `X × Y` such as for every `x ∈ X` there's exactly one `y ∈ Y` such that `(x, y) ∈ f`.
 
 The set `X` is called the _domain_ of `f`, `Y` is it's _codomain_.
 
@@ -40,12 +39,6 @@ const f: Record<number, number> = {
 }
 ```
 
-<!--
-TODO:
-Please note that the set `f` has to be described _statically_ when defining the function (meaning that the elements of that set cannot change with time for no reason).
-In this way we can exclude any form of side effect and the return value is always the same.
--->
-
 The one in the example is called an _extensional_ definition of a function, meaning we enumerate one by one each of the elements of its domain and for each one of them we point the corresponding codomain element.
 
 Naturally, when such a set is infinite this proves to be problematic. We can't list the entire domain and codomain of all functions.
@@ -58,8 +51,7 @@ This the familiar form in which we write the `double` function and its definitio
 const double = (x: number): number => x * 2
 ```
 
-The definition of a function as a subset of a cartesian product shows how in mathematics every function is pure: there is no action, no state mutation or elements being modified.
-In functional programming the implementation of functions has to follow as much as possible this ideal model.
+The definition of a function as a subset of a cartesian product shows how in mathematics every function is pure: there is no action, no state mutation or elements being modified. In functional programming the implementation of functions has to follow as much as possible this ideal model.
 
 **Quiz**. Which of the following procedures are pure functions?
 
@@ -109,12 +101,9 @@ export const f7 = (
 ): void => fs.readFile(path, { encoding: 'utf8' }, callback)
 ```
 
-The fact that a function is pure does not imply automatically a ban on local mutability as long as it doesn't leaks out of its scope.
+The fact that a function is pure does not imply automatically a ban on local mutability as long as it doesn't leak out of its scope.
 
-
-<center>
-<img src="images/mutable-immutable.jpg" width="400" alt="ADT" />
-</center>
+![mutable / immutable](images/mutable-immutable.jpg)
 
 **Example** (Implementazion details of the `concatAll` function for monoids)
 

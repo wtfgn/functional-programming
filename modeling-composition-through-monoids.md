@@ -4,9 +4,9 @@ Let's recap what we have seen till now.
 
 We have seen how an **algebra** is a combination of:
 
-- some type `A`
-- some operations involving the type `A`
-- some laws and properties for that combination.
+* some type `A`
+* some operations involving the type `A`
+* some laws and properties for that combination.
 
 The first algebra we have seen has been the magma, an algebra defined on some type A equipped with one operation called `concat`. There were no laws involved in `Magma<A>` the only requirement we had was that the `concat` operation had to be _closed_ on `A` meaning that the result:
 
@@ -22,8 +22,8 @@ Now we're going to add another condition on Semigroup.
 
 Given a `Semigroup` defined on some set `A` with some `concat` operation, if there is some element in `A` – we'll call this element _empty_ – such as for every element `a` in `A` the two following equations hold true:
 
-- **Right identity**: `concat(a, empty) = a`
-- **Left identity**: `concat(empty, a) = a`
+* **Right identity**: `concat(a, empty) = a`
+* **Left identity**: `concat(empty, a) = a`
 
 then the `Semigroup` is also a `Monoid`.
 
@@ -92,9 +92,7 @@ The consequence of the previous proof is that there can be only one unit per mon
 
 We have seen how each semigroup was a magma, but not every magma was a semigroup. In the same way, each monoid is a semigroup, but not every semigroup is a monoid.
 
-<center>
-<img src="images/monoid.png" width="300" alt="Magma vs Semigroup vs Monoid" />
-</center>
+![Magma vs Semigroup vs Monoid](images/monoid.png)
 
 **Example**
 
@@ -126,8 +124,8 @@ type Endomorphism<A> = (a: A) => A
 
 Given a type `A`, all endomorphisms defined on `A` are a monoid, such as:
 
-- the `concat` operation is the usual function composition
-- the unit, our `empty` value is the identity function
+* the `concat` operation is the usual function composition
+* the unit, our `empty` value is the identity function
 
 ```ts
 import { Endomorphism, flow, identity } from 'fp-ts/function'
@@ -147,12 +145,7 @@ const identity = (a: A) => a
 
 Whatever value we pass in input, it gives us the same value in output.
 
-<!--
-TODO:
-We can start having a small taste of the importance of the `identity` function. While apparently useless per se, this function is vital to define a monoid for functions, in this case, endomorphisms. In fact, _doing nothing_, being _empty_ or _neutral_ is a tremendously valuable property to have when it comes to composition and we can think of the `identity` function as the number `0` of functions.
--->
-
-## The `concatAll` function
+### The `concatAll` function
 
 One great property of monoids, compared to semigrops, is that the concatenation of multiple elements becomes even easier: it is not necessary anymore to provide an initial value.
 
@@ -171,7 +164,7 @@ console.log(concatAll(B.MonoidAny)([true, false, true])) // => true
 
 **Quiz**. Why is the initial value not needed anymore?
 
-## Product monoid
+### Product monoid
 
 As we have already seen with semigroups, it is possible to define a monoid instance for a `struct` if we are able to define a monoid instance for each of its fields.
 
@@ -207,4 +200,4 @@ const Monoid: Monoid<Point> = tuple(N.MonoidSum, N.MonoidSum)
 
 **Demo** (implementing a system to draw geoetric shapes on canvas)
 
-[`03_shapes.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/03_shapes.ts)
+[`03_shapes.ts`](src/03\_shapes.ts)

@@ -2,28 +2,22 @@
 
 A good first step when writing an application or feature is to define it's domain model. TypeScript offers many tools that help accomplishing this task. **Algebraic Data Types** (in short, ADTs) are one of these tools.
 
-<!--
-  What are the other tools?
--->
-
-## What is an ADT?
+### What is an ADT?
 
 > In computer programming, especially functional programming and type theory, an algebraic data type is a kind of composite type, i.e., **a type formed by combining other types**.
 
 Two common families of algebraic data types are:
 
-- **product types**
-- **sum types**
+* **product types**
+* **sum types**
 
-<center>
-<img src="images/adt.png" width="400" alt="ADT" />
-</center>
+![ADT](images/adt.png)
 
 Let's begin with the more familiar ones: product types.
 
-## Product types
+### Product types
 
-A product type is a collection of types T<sub>i</sub> indexed by a set `I`.
+A product type is a collection of types Ti indexed by a set `I`.
 
 Two members of this family are `n`-tuples, where `I` is an interval of natural numbers:
 
@@ -63,7 +57,7 @@ type HttpResponse<A> = {
 }
 ```
 
-### Why "product" types?
+#### Why "product" types?
 
 If we label with `C(A)` the number of elements of type `A` (also called in mathematics, **cardinality**), then the following equation hold true:
 
@@ -87,9 +81,7 @@ type Period = 'AM' | 'PM'
 type Clock = [Hour, Period]
 ```
 
-Type `Hour` has 12 members.
-Type `Period` has 2 members.
-Thus type `Clock` has `12 * 2 = 24` elements.
+Type `Hour` has 12 members. Type `Period` has 2 members. Thus type `Clock` has `12 * 2 = 24` elements.
 
 **Quiz**: What is the cardinality of the following `Clock` type?
 
@@ -106,7 +98,7 @@ type Clock = {
 }
 ```
 
-### When can I use a product type?
+#### When can I use a product type?
 
 Each time it's components are **independent**.
 
@@ -116,7 +108,7 @@ type Clock = [Hour, Period]
 
 Here `Hour` and `Period` are independent: the value of `Hour` does not change the value of `Period`. Every legal pair of `[Hour, Period]` makes "sense" and is legal.
 
-## Sum types
+### Sum types
 
 A sum type is a a data type that can hold a value of different (but limited) types. Only one of these types can be used in a single instance and there is generally a "tag" value differentiating those types.
 
@@ -196,13 +188,13 @@ export type List<A> =
 
 **Quiz** (TypeScript). Which of the following data types is a product or a sum type?
 
-- `ReadonlyArray<A>`
-- `Record<string, A>`
-- `Record<'k1' | 'k2', A>`
-- `ReadonlyMap<string, A>`
-- `ReadonlyMap<'k1' | 'k2', A>`
+* `ReadonlyArray<A>`
+* `Record<string, A>`
+* `Record<'k1' | 'k2', A>`
+* `ReadonlyMap<string, A>`
+* `ReadonlyMap<'k1' | 'k2', A>`
 
-### Constructors
+#### Constructors
 
 A sum type with `n` elements needs at least `n` **constructors**, one for each member:
 
@@ -267,7 +259,7 @@ export const cons = <A>(head: A, tail: List<A>): List<A> => ({
 const myList = cons(1, cons(2, cons(3, nil)))
 ```
 
-### Pattern matching
+#### Pattern matching
 
 JavaScript doesn't support [pattern matching](https://github.com/tc39/proposal-pattern-matching) (neither does TypeScript) but we can simulate it with a `match` function.
 
@@ -319,11 +311,11 @@ export const length: <A>(fa: List<A>) => number = match(
 
 **Quiz**. Why's the `head` API sub optimal?
 
--> See the [answer here](quiz-answers/pattern-matching.md)
+\-> See the [answer here](quiz-answers/pattern-matching.md)
 
 **Note**. TypeScript offers a great feature for sum types: **exhaustive check**. The type checker can _check_, no pun intended, whether all the possible cases are handled by the `switch` defined in the body of the function.
 
-### Why "sum" types?
+#### Why "sum" types?
 
 Because the following identity holds true:
 
@@ -350,7 +342,7 @@ type Option<A> = None | Some<A>
 
 From the general formula `C(Option<A>) = 1 + C(A)` we can derive the cardinality of the `Option<boolean>` type: `1 + 2 = 3` members.
 
-### When should I use a sum type?
+#### When should I use a sum type?
 
 When the components would be **dependent** if implemented with a product type.
 
@@ -431,8 +423,7 @@ This API is clearly not modeled on the following premise:
 
 > Make impossible state unrepresentable
 
-A sum type would've been a better choice, but which sum type?
-We'll see how to handle errors in a functional way.
+A sum type would've been a better choice, but which sum type? We'll see how to handle errors in a functional way.
 
 **Quiz**. Recently API's based on callbacks have been largely replaced by their `Promise` equivalents.
 
@@ -442,7 +433,7 @@ declare function readFile(path: string): Promise<string>
 
 Can you find some cons of the Promise solution when using static typing like in TypeScript?
 
-## Functional error handling
+### Functional error handling
 
 Let's see how to handle errors in a functional way.
 
@@ -456,7 +447,7 @@ f': X ⟶ Option(Y)
 
 Now that we know a bit more about sum types in TypeScript we can define the `Option` without much issues.
 
-### The `Option` type
+#### The `Option` type
 
 The type `Option` represents the effect of a computation which may fail (case `None`) or return a type `A` (case `Some<A>`):
 
@@ -555,7 +546,7 @@ pipe(result, match(
 
 Is it possible to define instances for the abstractions we've seen in the chapters before? Let's begin with `Eq`.
 
-### An `Eq` instance
+#### An `Eq` instance
 
 Suppose we have two values of type `Option<string>` and that we want to compare them to check if their equal:
 
@@ -692,7 +683,7 @@ console.log(OrdOptionMyTuple.compare(o1, o2)) // => -1
 console.log(OrdOptionMyTuple.compare(o1, o3)) // => -1
 ```
 
-### `Semigroup` and `Monoid` instances
+#### `Semigroup` and `Monoid` instances
 
 Now, let's suppose we want to "merge" two different `Option<A>`s,: there are four different cases:
 
@@ -741,7 +732,7 @@ declare const getMonoid: <A>(S: Semigroup<A>) => Monoid<Option<A>>
 
 **Quiz**. What is the `empty` member for the monoid?
 
--> See the [answer here](quiz-answers/option-semigroup-monoid-second.md)
+\-> See the [answer here](quiz-answers/option-semigroup-monoid-second.md)
 
 **Example**
 
@@ -833,7 +824,7 @@ console.log(monoidSettings.concat(workspaceSettings, userSettings))
 
 **Quiz**. Suppose VSCode cannot manage more than `80` columns per row, how could we modify the definition of `monoidSettings` to take that into account?
 
-### The `Either` type
+#### The `Either` type
 
 We have seen how the `Option` data type can be used to handle partial functions, which often represent computations than can fail or throw exceptions.
 

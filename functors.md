@@ -1,5 +1,7 @@
 # Functors
 
+## Functors
+
 In the last section we've spoken about the _TS_ category (the TypeScript category) and about function composition's core problem:
 
 > How can we compose two generic functions `f: (a: A) => B` and `g: (c: C) => D`?
@@ -10,7 +12,7 @@ Because, if it is true that categories can be used to model programming language
 
 Thus, solving this abstract problem means finding a concrete way of **composing programs in a generic way**. And _that_ is really interesting for us developers, isn't it?
 
-## Functions as programs
+### Functions as programs
 
 If we want to model programs with functions we need to tackle an issue immediately:
 
@@ -20,8 +22,8 @@ The answer is to model side effects through **effects**, meaning types that **re
 
 Let's see two possible techniques to do so in JavaScript:
 
-- define a DSL (domain specific language) for effects
-- use a _thunk_
+* define a DSL (domain specific language) for effects
+* use a _thunk_
 
 The first technique, using a DSL, means modifying a program like:
 
@@ -109,7 +111,7 @@ We'll call an **effectful program** a function with the following signature:
 
 Such a signature models a program that takes an input of type `A` and returns a result of type `B` together with an **effect** `F`, where `F` is some sort of type constructor.
 
-Let's recall that a [type constructor](https://en.wikipedia.org/wiki/Type_constructor) is an `n`-ary type operator that takes as argument one or more types and returns another type. We have seen examples of such constructors as `Option`, `ReadonlyArray`, `Either`.
+Let's recall that a [type constructor](https://en.wikipedia.org/wiki/Type\_constructor) is an `n`-ary type operator that takes as argument one or more types and returns another type. We have seen examples of such constructors as `Option`, `ReadonlyArray`, `Either`.
 
 **Example**
 
@@ -164,16 +166,16 @@ function flow<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C {
 
 But what about other cases?
 
-## A boundary that leads to functors
+### A boundary that leads to functors
 
 Let's consider the following boundary: `B = F<C>` for some type constructor `F`, we have the following situation:
 
-- `f: (a: A) => F<B>` is an effectful program
-- `g: (b: B) => C` is a pure program
+* `f: (a: A) => F<B>` is an effectful program
+* `g: (b: B) => C` is a pure program
 
 In order to compose `f` with `g` we need to find a procedure that allows us to derive a function `g` from a function `(b: B) => C` to a function `(fb: F<B>) => F<C>` in order to use the usual function composition (this way the codomain of `f` would be the same of the new function's domain).
 
-<img src="images/map.png" width="500" alt="map" />
+![map](images/map.png)
 
 We have mutated the original problem in a new one: can we find a function, let's call it `map`, that operates this way?
 
@@ -378,12 +380,12 @@ From a mathematical point of view, functors are **maps between categories** that
 
 Since categories are pairs of objects and morphisms, a functor too is a pair of two things:
 
-- a **map between objects** that binds every object `X` in _C_ to an object in _D_.
-- a **map between morphisms** that binds every morphism `f` in _C_ to a morphism `map(f)` in _D_.
+* a **map between objects** that binds every object `X` in _C_ to an object in _D_.
+* a **map between morphisms** that binds every morphism `f` in _C_ to a morphism `map(f)` in _D_.
 
 where _C_ e _D_ are two categories (aka two programming languages).
 
-<img src="images/functor.png" width="500" alt="functor" />
+![functor](images/functor.png)
 
 Even though a map between two different programming languages is a fascinating idea, we're more interested in a map where _C_ and _D_ are the same (the _TS_ category). In that case we're talking about **endofunctors** (from the greek "endo" meaning "inside", "internal").
 
@@ -391,12 +393,12 @@ From now on, unless specified differently, when we write "functor" we mean an en
 
 Now we know the practical side of functors, let's see the formal definition.
 
-## Definition
+### Definition
 
 A functor is a pair `(F, map)` where:
 
-- `F` is an `n`-ary (`n >= 1`) type constructor mapping every type `X` in a type `F<X>` (**map between objects**)
-- `map` is a function with the following signature:
+* `F` is an `n`-ary (`n >= 1`) type constructor mapping every type `X` in a type `F<X>` (**map between objects**)
+* `map` is a function with the following signature:
 
 ```ts
 map: <A, B>(f: (a: A) => B) => ((fa: F<A>) => F<B>)
@@ -406,8 +408,8 @@ that maps every function `f: (a: A) => B` in a function `map(f): (fa: F<A>) => F
 
 The following properties have to hold true:
 
-- `map(1`<sub>X</sub>`)` = `1`<sub>F(X)</sub> (**identities go to identities**)
-- `map(g ∘ f) = map(g) ∘ map(f)` (**the image of a composition is the composition of its images**)
+* `map(1`X`)` = `1`F(X) (**identities go to identities**)
+* `map(g ∘ f) = map(g) ∘ map(f)` (**the image of a composition is the composition of its images**)
 
 The second law allows to refactor and optimize the following computation:
 
@@ -424,7 +426,7 @@ console.log(pipe([1, 2, 3], map(double), map(increment))) // => [ 3, 5, 7 ]
 console.log(pipe([1, 2, 3], map(flow(double, increment)))) // => [ 3, 5, 7 ]
 ```
 
-## Functors and functional error handling
+### Functors and functional error handling
 
 Functors have a positive impact on functional error handling, let's see a practical example:
 
@@ -464,11 +466,11 @@ Practically, using `Option`, we're always in front of the `happy path`, error ha
 
 **Demo** (optional)
 
-[`04_functor.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/04_functor.ts)
+[`04_functor.ts`](src/04\_functor.ts)
 
 **Quiz**. `Task<A>` represents an asynchronous call that always succeed, how can we model a computation that can fail instead?
 
-## Functors compose
+### Functors compose
 
 Functors compose, meaning that given two functors `F` and `G` then the composition `F<G<A>>` is still a functor and the `map` of this composition is the composition of the `map`s.
 
@@ -512,7 +514,7 @@ getUserName(1)().then(console.log) // => some('Ruth R. Gonzalez')
 getUserName(4)().then(console.log) // => none
 ```
 
-## Contravariant Functors
+### Contravariant Functors
 
 In the previous section we haven't been completely thorough with our definitions. What we have seen in the previous section and called "functors" should be more properly called **covariant functors**.
 
@@ -520,7 +522,7 @@ In this section we'll see another variant of the functor concept, **contravarian
 
 The definition of a contravariant functor is pretty much the same of the covariant one, except for the signature of its fundamental operation, which is called `contramap` rather than `map`.
 
-<img src="images/contramap.png" width="300" alt="contramap" />
+![contramap](images/contramap.png)
 
 **Example**
 
@@ -558,7 +560,7 @@ const EqID: Eq<User> = pipe(
 */
 ```
 
-## Functors in `fp-ts`
+### Functors in `fp-ts`
 
 How do we define a functor instance in `fp-ts`? Let's see some example.
 
@@ -610,7 +612,7 @@ export const Functor: Functor1<'Response'> = {
 }
 ```
 
-## Do functors solve the general problem?
+### Do functors solve the general problem?
 
 Not yet. Functors allow us to compose an effectful program `f` with a pure program `g`, but `g` has to be a **unary** function, accepting one single argument. What happens if `g` takes two or more arguments?
 

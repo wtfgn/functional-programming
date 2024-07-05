@@ -1,4 +1,4 @@
-# Applicative functors
+# Applicative Functors
 
 In the section regarding functors we've seen that we can compose an effectful program `f: (a: A) => F<B>` with a pure one `g: (b: B) => C` through the transformation of `g` to a function `map(g): (fb: F<B>) => F<C>` (if and only if `F` admits a functor instance).
 
@@ -9,7 +9,7 @@ In the section regarding functors we've seen that we can compose an effectful pr
 
 But `g` has to be unary, it can only accept a single argument as input. What happens if `g` accepts two arguments? Can we still transform `g` using only the functor instance?
 
-## Currying
+### Currying
 
 First of all we need to model a function that accepts two arguments of type `B` and `C` (we can use a tuple for this) and returns a value of type `D`:
 
@@ -75,13 +75,13 @@ console.log(addFollower(follower)(user))
 */
 ```
 
-## The `ap` operation
+### The `ap` operation
 
 Suppose that:
 
-- we do not have a `follower` but only his `id`
-- we do not have a `user` but only his `id`
-- that we have an API `fetchUser` which, given an `id`, queries an endpoint that returns the corresponding `User`
+* we do not have a `follower` but only his `id`
+* we do not have a `user` but only his `id`
+* that we have an API `fetchUser` which, given an `id`, queries an endpoint that returns the corresponding `User`
 
 ```ts
 import * as T from 'fp-ts/Task'
@@ -147,7 +147,7 @@ More generally what we would like to have is a transformation, call it `liftA2`,
 liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 ```
 
-<img src="images/liftA2.png" width="500" alt="liftA2" />
+![liftA2](images/liftA2.png)
 
 How can we obtain it? Given that `g` is now a unary function, we can leverage the functor instance and the good old `map`:
 
@@ -155,7 +155,7 @@ How can we obtain it? Given that `g` is now a unary function, we can leverage th
 map(g): (fb: F<B>) => F<(c: C) => D>
 ```
 
-<img src="images/liftA2-first-step.png" width="500" alt="liftA2 (first step)" />
+![liftA2 (first step)](images/liftA2-first-step.png)
 
 Now we are blocked: there's no legal operation the functor instance provides us to "unpack" the type `F<(c: C) => D>` into `(fc: F<C>) => F<D>`.
 
@@ -361,7 +361,7 @@ Now we cam update ore "composition table":
 | effectful | pure (unary)  | `map(g) ∘ f`    |
 | effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
 
-## The `of` operation
+### The `of` operation
 
 Now we know that given two function `f: (a: A) => F<B>`, `g: (b: B, c: C) => D` we can obtain the composition `h`:
 
@@ -425,9 +425,9 @@ const of = <R, A>(a: A): Reader<R, A> => () => a
 
 **Demo**
 
-[`05_applicative.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/05_applicative.ts)
+[`05_applicative.ts`](src/05\_applicative.ts)
 
-## Applicative functors compose
+### Applicative functors compose
 
 Applicative functors compose, meaning that given two applicative functors `F` and `G`, their composition `F<G<A>>` is still an applicative functor.
 
@@ -457,7 +457,7 @@ const ap = <A>(
   )
 ```
 
-## Do applicative functors solve the general problem?
+### Do applicative functors solve the general problem?
 
 Not yet. There's one last very important case to consider: when **both** programs are effectful.
 

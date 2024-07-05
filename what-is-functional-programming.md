@@ -1,7 +1,3 @@
----
-slug: /
----
-
 # What is functional programming
 
 > Functional Programming is programming with pure functions. Mathematical functions.
@@ -32,7 +28,7 @@ What happens here is that `input` is passed to the first function `f1`, which re
 
 **Demo**
 
-[`00_pipe_and_flow.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/00_pipe_and_flow.ts)
+[`00_pipe_and_flow.ts`](src/00\_pipe\_and\_flow.ts)
 
 We'll see how functional programming provides us with tools to structure our code in that style.
 
@@ -42,9 +38,9 @@ Functional programming's goal is to **tame a system's complexity** through the u
 
 > Functional programming will help teach people the mathematics behind program construction:
 >
-> - how to write composable code
-> - how to reason about side effects
-> - how to write consistent, general, less ad-hoc APIs
+> * how to write composable code
+> * how to reason about side effects
+> * how to write consistent, general, less ad-hoc APIs
 
 What does it mean to give careful attention to code's properties? Let's see with an example:
 
@@ -68,9 +64,9 @@ for (let i = 0; i <= xs.length; i++) {
 
 A `for` loop offers a lot of flexibility, I can modify:
 
-- the starting index, `let i = 0`
-- the looping condition, `i < xs.length`
-- the step change, `i++`.
+* the starting index, `let i = 0`
+* the looping condition, `i < xs.length`
+* the step change, `i++`.
 
 This also implies that I may introduce **errors** and that I have no guarantees about the returned value.
 
@@ -93,8 +89,8 @@ const ys: Array<number> = xs.map(double)
 
 We can note how `map` lacks the same flexibility of a `for loop`, but it offers us some guarantees:
 
-- all the elements of the input array will be processed
-- the resulting array will always have the same number of elements as the starting one
+* all the elements of the input array will be processed
+* the resulting array will always have the same number of elements as the starting one
 
 In functional programming, where there's an emphasis on code properties rather than implementation details, the `map` operation is interesting **due to its limitations**
 

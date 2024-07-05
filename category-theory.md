@@ -1,4 +1,4 @@
-# Category theory
+# Category Theory
 
 We have seen how a founding pillar of functional programming is **composition**.
 
@@ -60,35 +60,32 @@ Luckily, for the last 70 years ago, a large number of researchers, members of th
 
 Saunders Mac Lane
 
-<center>
-<img src="images/maclane.jpg" width="300" alt="Saunders Mac Lane" />
+![Saunders Mac Lane](images/maclane.jpg)
 
 (Saunders Mac Lane)
 
-<img src="images/eilenberg.jpg" width="300" alt="Samuel Eilenberg" />
+![Samuel Eilenberg](images/eilenberg.jpg)
 
 (Samuel Eilenberg)
 
-</center>
-
 We'll see in the following chapters how a category can form the basis for:
 
-- a model for a generic **programming language**
-- a model for the concept of **composition**
+* a model for a generic **programming language**
+* a model for the concept of **composition**
 
-## Definition
+### Definition
 
 The definition of a category, even though it isn't really complex, is a bit long, thus I'll split it in two parts:
 
-- the first is merely technical (we need to define its constituents)
-- the second one will be more relevant to what we care for: a notion of composition
+* the first is merely technical (we need to define its constituents)
+* the second one will be more relevant to what we care for: a notion of composition
 
-### Part I (Constituents)
+#### Part I (Constituents)
 
 A category is a pair of `(Objects, Morphisms)` where:
 
-- `Objects` is a collection of **objects**
-- `Morphisms` is a collection of **morphisms** (also called "arrows") between objects
+* `Objects` is a collection of **objects**
+* `Morphisms` is a collection of **morphisms** (also called "arrows") between objects
 
 **Note**. The term "object" has nothing to do with the concept of "objects" in programming. Just think about those "objects" as black boxes we can't inspect, or simple placeholders useful to define the various morphisms.
 
@@ -96,54 +93,54 @@ Every morphism `f` owns a source object `A` and a target object `B`.
 
 In every morphism, both `A` and `B` are members of `Objects`. We write `f: A ⟼ B` and we say that "f is a morphism from A to B".
 
-<img src="images/morphism.png" width="300" alt="A morphism" />
+![A morphism](images/morphism.png)
 
 **Note**. For simplicity, from now on, I'll use labels only for objects, skipping the circles.
 
-### Part II (Composition)
+#### Part II (Composition)
 
 There is an operation, `∘`, called "composition", such as the following properties hold true:
 
-- (**composition of morphisms**) every time we have two morphisms `f: A ⟼ B` and `g: B ⟼ C` in `Morphisms` then there has to be a third morphism `g ∘ f: A ⟼ C` in `Morphisms` which is the _composition_ of `f` and `g`
+* (**composition of morphisms**) every time we have two morphisms `f: A ⟼ B` and `g: B ⟼ C` in `Morphisms` then there has to be a third morphism `g ∘ f: A ⟼ C` in `Morphisms` which is the _composition_ of `f` and `g`
 
-<img src="images/composition.png" width="300" alt="composition" />
+![composition](images/composition.png)
 
-- (**associativity**) if `f: A ⟼ B`, `g: B ⟼ C` and `h: C ⟼ D` then `h ∘ (g ∘ f) = (h ∘ g) ∘ f`
+* (**associativity**) if `f: A ⟼ B`, `g: B ⟼ C` and `h: C ⟼ D` then `h ∘ (g ∘ f) = (h ∘ g) ∘ f`
 
-<img src="images/associativity.png" width="500" alt="associativity" />
+![associativity](images/associativity.png)
 
-- (**identity**) for every object `X`, there is a morphism `identity: X ⟼ X` called _identity morphism_ of `X`, such as for every morphism `f: A ⟼ X` and `g: X ⟼ B`, the following equation holds true `identity ∘ f = f` and `g ∘ identity = g`.
+* (**identity**) for every object `X`, there is a morphism `identity: X ⟼ X` called _identity morphism_ of `X`, such as for every morphism `f: A ⟼ X` and `g: X ⟼ B`, the following equation holds true `identity ∘ f = f` and `g ∘ identity = g`.
 
-<img src="images/identity.png" width="300" alt="identity" />
+![identity](images/identity.png)
 
 **Example**
 
-<img src="images/category.png" width="300" alt="a simple category" />
+![a simple category](images/category.png)
 
-This category is very simple, there are three objects and six morphisms (1<sub>A</sub>, 1<sub>B</sub>, 1<sub>C</sub> are the identity morphisms for `A`, `B`, `C`).
+This category is very simple, there are three objects and six morphisms (1A, 1B, 1C are the identity morphisms for `A`, `B`, `C`).
 
-## Modeling programming languages with categories
+### Modeling programming languages with categories
 
 A category can be seen as a simplified model for a **typed programming language**, where:
 
-- objects are **types**
-- morphisms are **functions**
-- `∘` is the usual **function composition**
+* objects are **types**
+* morphisms are **functions**
+* `∘` is the usual **function composition**
 
 The following diagram:
 
-<img src="images/category.png" width="300" alt="a simple programming language" />
+![a simple programming language](images/category.png)
 
 can be seen as an imaginary (and simple) programming language with just three types and six functions
 
 Example given:
 
-- `A = string`
-- `B = number`
-- `C = boolean`
-- `f = string => number`
-- `g = number => boolean`
-- `g ∘ f = string => boolean`
+* `A = string`
+* `B = number`
+* `C = boolean`
+* `f = string => number`
+* `g = number => boolean`
+* `g ∘ f = string => boolean`
 
 The implementation could be something like:
 
@@ -162,18 +159,18 @@ const g = (n: number): boolean => n > 2
 const gf = (s: string): boolean => g(f(s))
 ```
 
-## A category for TypeScript
+### A category for TypeScript
 
 We can define a category, let's call it _TS_, as a simplified model of the TypeScript language, where:
 
-- **objects** are all the possible TypeScript types: `string`, `number`, `ReadonlyArray<string>`, etc...
-- **morphisms** are all TypeScript functions: `(a: A) => B`, `(b: B) => C`, ... where `A`, `B`, `C`, ... are TypeScript types
-- the **identity morphisms** are all encoded in a single polymorphic function `const identity = <A>(a: A): A => a`
-- **morphism's composition** is the usual function composition (which we know to be associative)
+* **objects** are all the possible TypeScript types: `string`, `number`, `ReadonlyArray<string>`, etc...
+* **morphisms** are all TypeScript functions: `(a: A) => B`, `(b: B) => C`, ... where `A`, `B`, `C`, ... are TypeScript types
+* the **identity morphisms** are all encoded in a single polymorphic function `const identity = <A>(a: A): A => a`
+* **morphism's composition** is the usual function composition (which we know to be associative)
 
 As a model of TypeScript, the _TS_ category may seem a bit limited: no loops, no `if`s, there's _almost_ nothing... that being said that simplified model is rich enough to help us reach our goal: to reason about a well-defined notion of composition.
 
-## Composition's core problem
+### Composition's core problem
 
 In the _TS_ category we can compose two generic functions `f: (a: A) => B` and `g: (c: C) => D` as long as `C = B`
 
@@ -193,12 +190,12 @@ In the next section we'll see under which conditions such a composition is possi
 
 **Spoiler**
 
-- to compose `f: (a: A) => B` with `g: (b: B) => C` we use our usual function composition
-- to compose `f: (a: A) => F<B>` with `g: (b: B) => C` we need a **functor** instance for `F`
-- to compose `f: (a: A) => F<B>` with `g: (b: B, c: C) => D` we need an **applicative functor** instance for `F`
-- to compose `f: (a: A) => F<B>` with `g: (b: B) => F<C>` we need a **monad** instance for `F`
+* to compose `f: (a: A) => B` with `g: (b: B) => C` we use our usual function composition
+* to compose `f: (a: A) => F<B>` with `g: (b: B) => C` we need a **functor** instance for `F`
+* to compose `f: (a: A) => F<B>` with `g: (b: B, c: C) => D` we need an **applicative functor** instance for `F`
+* to compose `f: (a: A) => F<B>` with `g: (b: B) => F<C>` we need a **monad** instance for `F`
 
-<img src="images/spoiler.png" width="900" alt="The four composition recipes" />
+<figure><img src="images/spoiler.png" alt=""><figcaption></figcaption></figure>
 
 The problem we started with at the beginning of this chapter corresponds to the second situation, where `F` is the `Option` type:
 

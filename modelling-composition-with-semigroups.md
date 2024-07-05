@@ -4,9 +4,9 @@ A semigroup is a recipe to combine two, or more, values.
 
 A semigroup is an **algebra**, which is generally defined as a specific combination of:
 
-- one or more sets
-- one or more operations on those sets
-- zero or more laws on the previous operations
+* one or more sets
+* one or more operations on those sets
+* zero or more laws on the previous operations
 
 Algebras are how mathematicians try to capture an idea in its purest form, eliminating everything that is superfluous.
 
@@ -18,53 +18,11 @@ Algebras can be thought of as an abstraction of **interfaces**:
 
 Before getting into semigroups, let's see first an example of an algebra, a _magma_.
 
-## Definition of a Magma
+### Definition of a Magma
 
 A Magma is a very simple algebra:
 
-- a set or type (A)
-- a `concat` operation
-- no laws to obey
-
-**Note**: in most cases the terms _set_ and _type_ can be used interchangeably.
-
-We can use a TypeScript `interface` to model a Magma.
-
-```ts
-interface Magma<A> {
-  readonly concat: (first: A, second: A) => A
-}
-```
-
-Thus, we have have the ingredients for an algebra:
-
-- a set `A`
-- an operation on the set `A`, `concat`. This operation is said to be _closed on_ the set `A` which means that whichever elements `A` we apply the operation on the result will still be an element of `A`. Since the result is still an `A`, it can be used again as an input for `concat` and the operation can be repeated how many times we want. In other words `concat` is a `combinator` for the type `A`.
-
-Let's implement a concrete instance of `Magma<A>` with `A` being the `number` type.
-
-```ts
-import { Magma } from 'fp-ts/Magma'
-
-const MagmaSub: Magma<number> = {
-  concat: (first, second) => first - second
-}
-
-// helper
-const getPipeableConcat = <A>(M: Magma<A>) => (second: A) => (first: A): A =>
-  M.concat(first, second)
-
-const concat = getPipeableConcat(MagmaSub)
-
-// usage example
-
-import { pipe } from 'fp-ts/function'
-
-pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)
-// => 2
-```
-
-**Quiz**. The fact that `concat` is a _closed_ operation isn't a trivial detail. If `A` is the set of natural numbers (defined as positive integers) instead of the JavaScript number type (a set of positive and negative floats), could we define a `Magma<Natural>` with `concat` implemented like in `MagmaSub`? Can you think of any other `concat` operation on natural numbers for which the `closure` property isn't valid?
+a set or type (A)a `concat` operationno laws to obey**Note**: in most cases the terms _set_ and _type_ can be used interchangeably.We can use a TypeScript `interface` to model a Magma.interface Magma\<A> {  readonly concat: (first: A, second: A) => A}Thus, we have have the ingredients for an algebra:a set `A`an operation on the set `A`, `concat`. This operation is said to be _closed on_ the set `A` which means that whichever elements `A` we apply the operation on the result will still be an element of `A`. Since the result is still an `A`, it can be used again as an input for `concat` and the operation can be repeated how many times we want. In other words `concat` is a `combinator` for the type `A`.Let's implement a concrete instance of `Magma<A>` with `A` being the `number` type.import { Magma } from 'fp-ts/Magma'const MagmaSub: Magma\<number> = {  concat: (first, second) => first - second}// helperconst getPipeableConcat = \<A>(M: Magma\<A>) => (second: A) => (first: A): A =>  M.concat(first, second)const concat = getPipeableConcat(MagmaSub)// usage exampleimport { pipe } from 'fp-ts/function'pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)// => 2**Quiz**. The fact that `concat` is a _closed_ operation isn't a trivial detail. If `A` is the set of natural numbers (defined as positive integers) instead of the JavaScript number type (a set of positive and negative floats), could we define a `Magma<Natural>` with `concat` implemented like in `MagmaSub`? Can you think of any other `concat` operation on natural numbers for which the `closure` property isn't valid?
 
 > See the [answer here](quiz-answers/magma-concat-closed.md)
 
@@ -72,7 +30,7 @@ pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)
 
 Magmas do not obey any law, they only have the closure requirement. Let's see an algebra that do requires another law: semigroups.
 
-## Definition of a Semigroup
+### Definition of a Semigroup
 
 > Given a `Magma` if the `concat` operation is **associative** then it's a _semigroup_.
 
@@ -99,9 +57,7 @@ String concatenation benefits from associativity.
 
 Every semigroup is a magma, but not every magma is a semigroup.
 
-<center>
-<img src="images/semigroup.png" width="300" alt="Magma vs Semigroup" />
-</center>
+![Magma vs Semigroup](images/semigroup.png)
 
 **Example**
 
@@ -139,7 +95,7 @@ interface Semigroup<A> extends Magma<A> {}
 
 The following law has to hold true:
 
-- **Associativity**: If `S` is a semigroup the following has to hold true:
+* **Associativity**: If `S` is a semigroup the following has to hold true:
 
 ```ts
 S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
@@ -161,13 +117,13 @@ const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
 
 The name `concat` makes sense for arrays (as we'll see later) but, depending on the context and the type `A` on whom we're implementing an instance, the `concat` semigroup operation may have different interpretations and meanings:
 
-- "concatenation"
-- "combination"
-- "merging"
-- "fusion"
-- "selection"
-- "sum"
-- "substitution"
+* "concatenation"
+* "combination"
+* "merging"
+* "fusion"
+* "selection"
+* "sum"
+* "substitution"
 
 and many others.
 
@@ -184,7 +140,7 @@ const SemigroupSum: Semigroup<number> = {
 }
 ```
 
-**Quiz**. Can the `concat` combinator defined in the demo [`01_retry.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/01_retry.ts) be used to define a `Semigroup` instance for the `RetryPolicy` type?
+**Quiz**. Can the `concat` combinator defined in the demo [`01_retry.ts`](src/01\_retry.ts) be used to define a `Semigroup` instance for the `RetryPolicy` type?
 
 > See the [answer here](quiz-answers/semigroup-demo-concat.md)
 
@@ -225,15 +181,15 @@ const SemigroupAny: Semigroup<boolean> = {
 }
 ```
 
-## The `concatAll` function
+### The `concatAll` function
 
 By definition `concat` combines merely two elements of `A` every time. Is it possible to combine any number of them?
 
 The `concatAll` function takes:
 
-- an instance of a semigroup
-- an initial value
-- an array of elements
+* an instance of a semigroup
+* an initial value
+* an array of elements
 
 ```ts
 import * as S from 'fp-ts/Semigroup'
@@ -250,7 +206,7 @@ console.log(product([1, 2, 3, 4])) // => 72
 
 **Quiz**. Why do I need to provide an initial value?
 
--> See the [answer here](quiz-answers/semigroup-concatAll-initial-value.md)
+\-> See the [answer here](quiz-answers/semigroup-concatall-initial-value.md)
 
 **Example**
 
@@ -300,7 +256,7 @@ const last = <A>(): Semigroup<A> => ({
 })
 ```
 
-## The dual semigroup
+### The dual semigroup
 
 Given a semigroup instance, it is possible to obtain a new semigroup instance by simply swapping the order in which the operands are combined:
 
@@ -318,11 +274,11 @@ pipe(S.Semigroup.concat('a', 'b'), console.log) // => 'ab'
 pipe(reverse(S.Semigroup).concat('a', 'b'), console.log) // => 'ba'
 ```
 
-**Quiz**. This combinator makes sense because, generally speaking, the `concat` operation is not [**commutative**](https://en.wikipedia.org/wiki/Commutative_property), can you find an example where `concat` is commutative and one where it isn't?
+**Quiz**. This combinator makes sense because, generally speaking, the `concat` operation is not [**commutative**](https://en.wikipedia.org/wiki/Commutative\_property), can you find an example where `concat` is commutative and one where it isn't?
 
 > See the [answer here](quiz-answers/semigroup-commutative.md)
 
-## Semigroup product
+### Semigroup product
 
 Let's try defining a semigroup instance for more complex types:
 
@@ -354,9 +310,7 @@ const v2: Vector = { x: 1, y: 2 }
 console.log(SemigroupVector.concat(v1, v2)) // => { x: 2, y: 3 }
 ```
 
-<center>
-<img src="images/semigroupVector.png" width="300" alt="SemigroupVector" />
-</center>
+![SemigroupVector](images/semigroupVector.png)
 
 Too much boilerplate? The good news is that the **mathematical theory** behind semigroups tells us we can implement a semigroup instance for a struct like `Vector` if we can implement a semigroup instance for each of its fields.
 
@@ -411,7 +365,7 @@ pipe(
 ) // => 'a|b|c'
 ```
 
-## Finding a Semigroup instance for any type
+### Finding a Semigroup instance for any type
 
 The associativity property is a very strong requirement, what happens if, given a specific type `A` we can't find an associative operation on `A`?
 
@@ -553,11 +507,11 @@ export const getUser = (id: number): ReadonlyNonEmptyArray<User> => {
 
 It should be noted that, even when I do have a `Semigroup<A>` instance, using a free semigroup might be still convenient for the following reasons:
 
-- avoids executing possibly expensive and pointless computations
-- avoids passing around the semigroup instance
-- allows the API consumer to decide which is the correct merging strategy (by using `concatAll`).
+* avoids executing possibly expensive and pointless computations
+* avoids passing around the semigroup instance
+* allows the API consumer to decide which is the correct merging strategy (by using `concatAll`).
 
-## Order-derivable Semigroups
+### Order-derivable Semigroups
 
 Given that `number` is **a total order** (meaning that whichever `x` and `y` we choose, one of those two conditions has to hold true: `x <= y` or `y <= x`) we can define another two `Semigroup<number>` instances using the `min` or `max` operations.
 

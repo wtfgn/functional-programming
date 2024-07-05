@@ -1,15 +1,12 @@
 # Monads
 
-<center>
-<img src="images/moggi.jpg" width="300" alt="Eugenio Moggi" />
+![Eugenio Moggi](images/moggi.jpg)
 
 (Eugenio Moggi is a professor of computer science at the University of Genoa, Italy. He first described the general use of monads to structure programs)
 
-<img src="images/wadler.jpg" width="300" alt="Philip Lee Wadler" />
+![Philip Lee Wadler](images/wadler.jpg)
 
 (Philip Lee Wadler is an American computer scientist known for his contributions to programming language design and type theory)
-
-</center>
 
 In the last chapter we have seen how we can compose an effectful program `f: (a: A) => F<B>` with an `n`-ary pure program `g`, if and only if the type constructor `F` admits an applicative functor instance:
 
@@ -28,7 +25,7 @@ g: (b: B) => F<C>
 
 What is the composition of `f` and `g`?
 
-## The problem with nested contexts
+### The problem with nested contexts
 
 Let's see few examples on why we need something more.
 
@@ -72,8 +69,7 @@ const followersOfFollowers = pipe(
 
 Cool! Let's see some other data type.
 
-**Example** (`F = Option`)
-Suppose you want to calculate the reciprocal of the first element of a numerical array:
+**Example** (`F = Option`) Suppose you want to calculate the reciprocal of the first element of a numerical array:
 
 ```ts
 import { pipe } from 'fp-ts/function'
@@ -98,8 +94,7 @@ The `flatten: <A>(mma: Option<Option<A>>) => Option<A>` function exported by the
 const inverseHead = pipe([1, 2, 3], A.head, O.map(inverse), O.flatten)
 ```
 
-All of those `flatten` funcitons...They aren't a coincidence, there is a functional pattern behind the scenes: both the type constructors
-`ReadonlyArray` and `Option` (and many others) admit a **monad instance** and
+All of those `flatten` funcitons...They aren't a coincidence, there is a functional pattern behind the scenes: both the type constructors `ReadonlyArray` and `Option` (and many others) admit a **monad instance** and
 
 > `flatten` is the most peculiar operation of monads
 
@@ -109,7 +104,7 @@ So, what is a monad?
 
 Here is how they are often presented...
 
-## Monad Definition
+### Monad Definition
 
 **Definition**. A monad is defined by three things:
 
@@ -129,26 +124,24 @@ chain: <A, B>(f: (a: A) => M<B>) => (ma: M<A>) => M<B>
 
 The `of` and `chain` functions need to obey three laws:
 
-- `chain(of) ∘ f = f` (**Left identity**)
-- `chain(f) ∘ of = f` (**Right identity**)
-- `chain(h) ∘ (chain(g) ∘ f) = chain((chain(h) ∘ g)) ∘ f` (**Associativity**)
+* `chain(of) ∘ f = f` (**Left identity**)
+* `chain(f) ∘ of = f` (**Right identity**)
+* `chain(h) ∘ (chain(g) ∘ f) = chain((chain(h) ∘ g)) ∘ f` (**Associativity**)
 
 where `f`, `g`, `h` are all effectful functions and `∘` is the usual function composition.
 
 When I saw this definition for the first time I had many questions:
 
-- why exactly those two operation `of` and `chain`? and why to they have those signatures?
-- why do they have those synonyms like "pure" or "flatMap"?
-- why does laws need to hold true? What do they mean?
-- if `flatten` is so important for monads, why it doesn't compare in its definition?
+* why exactly those two operation `of` and `chain`? and why to they have those signatures?
+* why do they have those synonyms like "pure" or "flatMap"?
+* why does laws need to hold true? What do they mean?
+* if `flatten` is so important for monads, why it doesn't compare in its definition?
 
 This chapter will try to answer all of these questions.
 
 Let's get back to the core problem: what is the composition of two effectful functions `f` and `g`?
 
-<img src="images/kleisli_arrows.png" alt="two Kleisli arrows, what's their composition?" width="450px" />
-
-<center>(two Kleisli Arrows)</center>
+![two Kleisli arrows, what's their composition?](images/kleisli\_arrows.png)(two Kleisli Arrows)
 
 **Note**. An effectful function is also called **Kleisli arrow**.
 
@@ -160,36 +153,26 @@ But we've already seen some abstractions that talks specifically about compositi
 
 We can transform our problem into a category problem, meaning: can we find a category that models the composition of Kleisli arrows?
 
-## The Kleisli category
+### The Kleisli category
 
-<center>
-<img src="images/kleisli.jpg" width="300" alt="Heinrich Kleisli" />
+![Heinrich Kleisli](images/kleisli.jpg)
 
 (Heinrich Kleisli, Swiss mathematician)
 
-</center>
-
 Let's try building a category _K_ (called **Kleisli category**) which contains _only_ Kleisli arrows:
 
-- **objects** will be the same objects of the _TS_ category, so all TypeScript types.
-- **morphisms** are built like this: every time there is a Kleisli arrow `f: A ⟼ M<B>` in _TS_ we draw an arrow `f': A ⟼ B` in _K_
+* **objects** will be the same objects of the _TS_ category, so all TypeScript types.
+* **morphisms** are built like this: every time there is a Kleisli arrow `f: A ⟼ M<B>` in _TS_ we draw an arrow `f': A ⟼ B` in _K_
 
-<center>
-<img src="images/kleisli_category.png" alt="above the TS category, below the K construction" width="400px" />
-
-(above the composition in the _TS_ category, below the composition in the _K_ construction)
-
-</center>
-
-So what would be the composition of `f` and `g` in _K_?
-It's th red arrow called `h'` in the image below:
-
-<center>
-<img src="images/kleisli_composition.png" alt="above the composition in the TS category, below the composition in the K construction" width="400px" />
+![above the TS category, below the K construction](images/kleisli\_category.png)
 
 (above the composition in the _TS_ category, below the composition in the _K_ construction)
 
-</center>
+So what would be the composition of `f` and `g` in _K_? It's th red arrow called `h'` in the image below:
+
+![above the composition in the TS category, below the composition in the K construction](images/kleisli\_composition.png)
+
+(above the composition in the _TS_ category, below the composition in the _K_ construction)
 
 Given that `h'` is an arrow from `A` to `C` in `K`, we can find a corresponding function `h` from `A` to `M<C>` in `TS`.
 
@@ -197,16 +180,13 @@ Thus, a good candidate for the following composition of `f` and `g` in _TS_ is s
 
 Let's try implementing such a function.
 
-## Defining `chain` step by step
+### Defining `chain` step by step
 
 The first point (1) of the monad definition tells us that `M` admits a functor instance, thus we can use the `map` function to transform the function `g: (b: B) => M<C>` into a function `map(g): (mb: M<B>) => M<M<C>>`
 
-<center>
-<img src="images/flatMap.png" alt="where chain comes from" width="450px" />
+![where chain comes from](images/flatMap.png)
 
 (how to obtain the `h` function)
-
-</center>
 
 We're stuck now though: there is no legal operation for the functor instance that allows us to flatten a value of type `M<M<C>>` into a value of type `M<C>`, we need an additional operation, let's call it `flatten`.
 
@@ -224,12 +204,9 @@ Thus we can get `chain` in this way
 chain = flatten ∘ map(g)
 ```
 
-<center>
-<img src="images/chain.png" alt="how chain operates on the function g" width="400px" />
+![how chain operates on the function g](images/chain.png)
 
 (how `chain` operates on the function `g`)
-
-</center>
 
 Now we can update our composition table
 
@@ -240,14 +217,11 @@ Now we can update our composition table
 | effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
 | effectful | effectful     | `chain(g) ∘ f`  |
 
-What about `of`? Well, `of` comes from the identity morphisms in _K_: for every identity morphism 1<sub>A</sub> in _K_ there has to be a corresponding function from `A` to `M<A>` (that is, `of: <A>(a: A) => M<A>`).
+What about `of`? Well, `of` comes from the identity morphisms in _K_: for every identity morphism 1A in _K_ there has to be a corresponding function from `A` to `M<A>` (that is, `of: <A>(a: A) => M<A>`).
 
-<center>
-<img src="images/of.png" alt="where of comes from" width="300px" />
+![where of comes from](images/of.png)
 
 (where `of` comes from)
-
-</center>
 
 The fact that `of` is the neutral element for `chain` allows this kind of flux control (pretty common):
 
@@ -264,8 +238,8 @@ Last question: where do the laws come from? They are nothing else but the catego
 
 | Law            | _K_                               | _TS_                                                    |
 | -------------- | --------------------------------- | ------------------------------------------------------- |
-| Left identity  | 1<sub>B</sub> ∘ `f'` = `f'`       | `chain(of) ∘ f = f`                                     |
-| Right identity | `f'` ∘ 1<sub>A</sub> = `f'`       | `chain(f) ∘ of = f`                                     |
+| Left identity  | 1B ∘ `f'` = `f'`                  | `chain(of) ∘ f = f`                                     |
+| Right identity | `f'` ∘ 1A = `f'`                  | `chain(f) ∘ of = f`                                     |
 | Associativity  | `h' ∘ (g' ∘ f') = (h' ∘ g') ∘ f'` | `chain(h) ∘ (chain(g) ∘ f) = chain((chain(h) ∘ g)) ∘ f` |
 
 If we now go back to the examples that showed the problem with nested contexts we can solve them using `chain`:
@@ -355,7 +329,7 @@ const chain = <B, R, C>(g: (b: B) => Reader<R, C>) => (
 ): Reader<R, C> => (r) => g(mb(r))(r)
 ```
 
-## Manipulating programs
+### Manipulating programs
 
 Let's see now, how thanks to referential transparency and the monad concept we can programmaticaly manipulate programs.
 
@@ -460,8 +434,7 @@ export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   )
 ```
 
-**Digression**. As you can notice, using `chain` when it is required to maintain a scope leads to verbose code.
-In languages that support monadic style natively there is often syntax support that goes by the name of "do notation" which eases this kind of situations.
+**Digression**. As you can notice, using `chain` when it is required to maintain a scope leads to verbose code. In languages that support monadic style natively there is often syntax support that goes by the name of "do notation" which eases this kind of situations.
 
 Let's see a Haskell example
 
@@ -829,4 +802,4 @@ program5(DepsAsync)().then(console.log)
 
 **Demo**
 
-[`06_game.ts`](https://github.com/enricopolanski/functional-programming/blob/master/src/06_game.ts)
+[`06_game.ts`](src/06\_game.ts)
