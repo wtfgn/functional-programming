@@ -22,7 +22,49 @@ Before getting into semigroups, let's see first an example of an algebra, a _mag
 
 A Magma is a very simple algebra:
 
-a set or type (A)a `concat` operationno laws to obey**Note**: in most cases the terms _set_ and _type_ can be used interchangeably.We can use a TypeScript `interface` to model a Magma.interface Magma\<A> {  readonly concat: (first: A, second: A) => A}Thus, we have have the ingredients for an algebra:a set `A`an operation on the set `A`, `concat`. This operation is said to be _closed on_ the set `A` which means that whichever elements `A` we apply the operation on the result will still be an element of `A`. Since the result is still an `A`, it can be used again as an input for `concat` and the operation can be repeated how many times we want. In other words `concat` is a `combinator` for the type `A`.Let's implement a concrete instance of `Magma<A>` with `A` being the `number` type.import { Magma } from 'fp-ts/Magma'const MagmaSub: Magma\<number> = {  concat: (first, second) => first - second}// helperconst getPipeableConcat = \<A>(M: Magma\<A>) => (second: A) => (first: A): A =>  M.concat(first, second)const concat = getPipeableConcat(MagmaSub)// usage exampleimport { pipe } from 'fp-ts/function'pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)// => 2**Quiz**. The fact that `concat` is a _closed_ operation isn't a trivial detail. If `A` is the set of natural numbers (defined as positive integers) instead of the JavaScript number type (a set of positive and negative floats), could we define a `Magma<Natural>` with `concat` implemented like in `MagmaSub`? Can you think of any other `concat` operation on natural numbers for which the `closure` property isn't valid?
+* a set or type (A)
+* a `concat` operation
+* no laws to obey
+
+**Note**: in most cases the terms _set_ and _type_ can be used interchangeably.
+
+We can use a TypeScript `interface` to model a Magma.
+
+```typescript
+interface Magma<A> {
+  readonly concat: (first: A, second: A) => A
+}
+```
+
+Thus, we have have the ingredients for an algebra:
+
+* a set `A`
+* an operation on the set `A`, `concat`. This operation is said to be _closed on_ the set `A` which means that whichever elements `A` we apply the operation on the result will still be an element of `A`. Since the result is still an `A`, it can be used again as an input for `concat` and the operation can be repeated how many times we want. In other words `concat` is a `combinator` for the type `A`.
+
+Let's implement a concrete instance of `Magma<A>` with `A` being the `number` type.
+
+```typescript
+import { Magma } from 'fp-ts/Magma'
+
+const MagmaSub: Magma<number> = {
+  concat: (first, second) => first - second
+}
+
+// helper
+const getPipeableConcat = <A>(M: Magma<A>) => (second: A) => (first: A): A =>
+  M.concat(first, second)
+
+const concat = getPipeableConcat(MagmaSub)
+
+// usage example
+
+import { pipe } from 'fp-ts/function'
+
+pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)
+// => 2
+```
+
+**Quiz**. The fact that `concat` is a _closed_ operation isn't a trivial detail. If `A` is the set of natural numbers (defined as positive integers) instead of the JavaScript number type (a set of positive and negative floats), could we define a `Magma<Natural>` with `concat` implemented like in `MagmaSub`? Can you think of any other `concat` operation on natural numbers for which the `closure` property isn't valid?
 
 > See the [answer here](quiz-answers/magma-concat-closed.md)
 
