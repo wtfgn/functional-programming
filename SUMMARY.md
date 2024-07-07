@@ -5,6 +5,7 @@
 * [The two pillars of functional programming](the-two-pillars-of-functional-programming.md)
 * [Modelling composition with Semigroups](modelling-composition-with-semigroups.md)
 * [Modelling equivalence with Eq](modelling-equivalence-with-eq.md)
+* [Modeling ordering relations with Ord](modeling-ordering-relations-with-ord.md)
 * [Modeling composition through Monoids](modeling-composition-through-monoids.md)
 * [Pure and partial functions](pure-and-partial-functions.md)
 * [Algebraic Data Types](algebraic-data-types.md)
