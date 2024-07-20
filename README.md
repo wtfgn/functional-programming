@@ -4,7 +4,7 @@ This book introduces basic functional programming concepts using fp-ts.
 
 # Disclaimer
 
-This book is based on the repo [functional-programming](https://github.com/enricopolanski/functional-programming) which is an edited translation of [Giulio Canti](https://gcanti.github.io/about.html)'s ["Introduction to Functional Programming (Italian)"](https://github.com/gcanti/functional-programming).
+This book is based on the repo [functional-programming](https://github.com/enricopolanski/functional-programming) which is a translated vers90j of [Giulio Canti](https://gcanti.github.io/about.html)'s ["Introduction to Functional Programming (Italian)"](https://github.com/gcanti/functional-programming).
 I want to express my appreciation for their contribution and acknowledge their efforts in creating the original content.
 
 To ensure compliance with copyright laws and respect the rights of the original author, I have used this repository solely for the purpose of improving readability, organization, or adding additional features.
